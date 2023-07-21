@@ -1,11 +1,12 @@
 package com.devteam.demonstration.user;
 
+import com.devteam.demonstration.user.dao.UserDAO;
+import com.devteam.demonstration.user.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -18,25 +19,37 @@ public class UserController {
     UserService userService;
 
     // Injection de dépendance par constructeur
-//    UserService userService;
-
-//    public UserController(UserService userService) {
-//        this.userService = userService;
-//    }
+        //    UserService userService;
+        //
+        //    public UserController(UserService userService) {
+        //        this.userService = userService;
+        //    }
 
     // Si l'on ne préciser pas de route après GetMapping c'est la route par défaut
     @GetMapping
-    public String getUser() {
-        log.info("USER CONTROLLER - RECUPERATION D'UN UTILISATEUR");
-        return "Kevin";
+    public List<UserDTO> getAllUsers() {
+        log.info("USER CONTROLLER - RECUPERATION DE TOUS LES UTILISATEURS");
+        return userService.getAllUsers();
     }
 
 
     @GetMapping("/getUser")
-    public String getUserByName(@RequestParam String name) {
-        log.info("USER CONTROLLER - RECUPERATION D'UN UTILISATEUR AYANT LE NOM " + name);
-        return userService.getUserByName(name);
+    public UserDTO getUserByEmail(@RequestParam String email) {
+        log.info("USER CONTROLLER - RECUPERATION D'UN UTILISATEUR AYANT LE NOM " + email);
+        return userService.getUserByEmail(email);
+    }
 
+    @GetMapping("/getUserDAO")
+    public UserDAO getUserByEmailDAO(@RequestParam String email) {
+        log.info("USER CONTROLLER - RECUPERATION D'UN UTILISATEUR AYANT LE NOM " + email);
+        return userService.getUserByEmailDAO(email);
+    }
+
+
+    @PostMapping
+    public List<UserDAO> addUser(@RequestBody UserDAO user){
+        log.info("USER CONTROLLER - INSERTION D'UN UTILISATEUR AYANT LE NOM " + user.getName());
+        return userService.addUser(user);
     }
 
 
